@@ -122,28 +122,45 @@ struct Index {
     Column() {
       Scroll() {
         Column({ space: 18 }) {
-          Blank().height(24)
+          Blank().height(16)
 
-          Text('鸿蒙高级应用开发 · 期末大作业')
-            .fontSize(11)
-            .fontColor(C_SUB)
-            .letterSpacing(2)
+          // 头图：案发现场氛围
+          Stack({ alignContent: Alignment.BottomStart }) {
+            Image($r('app.media.bg_lab'))
+              .width('100%')
+              .height(208)
+              .objectFit(ImageFit.Cover)
 
-          Column({ space: 6 }) {
-            Text('回声馆调查事件簿')
-              .fontSize(30)
-              .fontWeight(FontWeight.Bold)
-              .fontColor(C_TEXT)
-            Text('校园线索推理 · 三结局')
-              .fontSize(13)
-              .fontColor(C_ACCENT)
-              .letterSpacing(2)
+            Column()
+              .width('100%')
+              .height(208)
+              .linearGradient({
+                angle: 180,
+                colors: [['#000F1620', 0.0], ['#B30F1620', 0.62], ['#FF0F1620', 1.0]]
+              })
+
+            Column({ space: 6 }) {
+              Text('鸿蒙高级应用开发 · 期末大作业')
+                .fontSize(10)
+                .fontColor(C_SUB)
+                .letterSpacing(1)
+              Text('回声馆调查事件簿')
+                .fontSize(26)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(C_TEXT)
+              Text('校园线索推理 · 三结局')
+                .fontSize(12)
+                .fontColor(C_ACCENT)
+                .letterSpacing(2)
+            }
+            .alignItems(HorizontalAlign.Start)
+            .padding({ left: 18, right: 18, bottom: 16 })
           }
-          .alignItems(HorizontalAlign.Start)
           .width('100%')
-          .margin({ top: 4 })
-
-          Divider().color(C_BORDER).width('100%')
+          .height(208)
+          .borderRadius(18)
+          .clip(true)
+          .border({ width: 1, color: C_BORDER })
 
           this.briefCard()
 

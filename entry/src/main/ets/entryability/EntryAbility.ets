@@ -33,6 +33,19 @@ export default class EntryAbility extends UIAbility {
     } catch (err) {
       hilog.error(DOMAIN, 'testTag', 'Failed to set colorMode. Cause: %{public}s', JSON.stringify(err));
     }
+
+    // 沉浸式深色系统栏：与应用主色一致，避免上下出现白色条
+    try {
+      const mainWindow: window.Window = windowStage.getMainWindowSync();
+      mainWindow.setWindowSystemBarProperties({
+        statusBarColor: '#0F1620',
+        statusBarContentColor: '#E9EEF5',
+        navigationBarColor: '#0F1620',
+        navigationBarContentColor: '#E9EEF5'
+      });
+    } catch (err) {
+      hilog.error(DOMAIN, 'testTag', 'Failed to set systemBar. Cause: %{public}s', JSON.stringify(err));
+    }
   }
 
   onWindowStageDestroy(): void {

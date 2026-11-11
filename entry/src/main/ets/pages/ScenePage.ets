@@ -21,6 +21,7 @@ struct ScenePage {
   @State sceneIndex: number = 0;
   @State dialogLines: string[] = [];
   @State dialogNpc: string = '';
+  @State dialogNpcId: string = '';
   @State dialogIndex: number = 0;
   @State pendingClues: string[] = [];
   private ready: boolean = false;
@@ -30,6 +31,28 @@ struct ScenePage {
       this.gs = state;
       this.ready = true;
     });
+  }
+
+  /** 当前场景的背景插画 */
+  private heroRes(): Resource {
+    if (this.sceneIndex === 1) {
+      return $r('app.media.bg_duty');
+    }
+    if (this.sceneIndex === 2) {
+      return $r('app.media.bg_roof');
+    }
+    return $r('app.media.bg_lab');
+  }
+
+  /** 当前对话人物的头像 */
+  private npcAvatar(): Resource {
+    if (this.dialogNpcId === 'B') {
+      return $r('app.media.npc_b');
+    }
+    if (this.dialogNpcId === 'C') {
+      return $r('app.media.npc_c');
+    }
+    return $r('app.media.npc_a');
   }
 
   private currentSceneId(): string {
@@ -103,6 +126,7 @@ struct ScenePage {
       if (dialog !== undefined) {
         const npc = findNpc(dialog.npcId);
         this.dialogNpc = npc === undefined ? '' : `${npc.name} · ${npc.role}`;
+        this.dialogNpcId = dialog.npcId;
         this.dialogLines = dialog.lines.slice();
         this.dialogIndex = 0;
         return;
@@ -134,6 +158,7 @@ struct ScenePage {
     }
     this.dialogLines = [];
     this.dialogNpc = '';
+    this.dialogNpcId = '';
     this.dialogIndex = 0;
     this.reportGain();
   }
@@ -204,7 +229,23 @@ struct ScenePage {
     Column() {
       Blank()
       Column({ space: 14 }) {
-        Text(this.dialogNpc).fontSize(12).fontColor(C_ACCENT).letterSpacing(1)
+        Row({ space: 10 }) {
+          Image(this.npcAvatar())
+            .width(46)
+            .height(46)
+            .borderRadius(10)
+            .objectFit(ImageFit.Cover)
+            .border({ width: 1, color: C_BORDER })
+
+          Column({ space: 3 }) {
+            Text(this.dialogNpc).fontSize(13).fontColor(C_TEXT)
+            Text('对话').fontSize(10).fontColor(C_ACCENT).letterSpacing(2)
+          }
+          .alignItems(HorizontalAlign.Start)
+          .layoutWeight(1)
+        }
+        .width('100%')
+
         Text(this.dialogLines[this.dialogIndex])
           .fontSize(15)
           .fontColor(C_TEXT)
@@ -266,6 +307,30 @@ struct ScenePage {
         .width('100%')
         .padding({ left: 20, right: 20, top: 12, bottom: 12 })
 
+        // 场景画面
+        Stack({ alignContent: Alignment.Bottom }) {
+          Image(this.heroRes())
+            .width('100%')
+            .height(168)
+            .objectFit(ImageFit.Cover)
+
+          Column()
+            .width('100%')
+            .height(168)
+            .linearGradient({
+              angle: 180,
+              colors: [['#000F1620', 0.0], ['#800F1620', 0.55], ['#FF0F1620', 1.0]]
+            })
+
+          Text(SCENES[this.sceneIndex].name)
+            .fontSize(13)
+            .fontColor(C_TEXT)
+            .letterSpacing(2)
+            .padding({ left: 16, right: 16, bottom: 12 })
+        }
+        .width('100%')
+        .height(168)
+
         // 场景切换
         Row({ space: 4 }) {
           ForEach(SCENES, (item: SceneDef, index: number) => {
@@ -274,9 +339,10 @@ struct ScenePage {
         }
         .width('100%')
         .padding(4)
-        .margin({ left: 20, right: 20, top: 0 })
+        .margin({ left: 20, right: 20, top: 14 })
         .backgroundColor(C_CARD)
         .borderRadius(12)
+        .border({ width: 1, color: C_BORDER })
 
         // 事件列表
         Scroll() {
