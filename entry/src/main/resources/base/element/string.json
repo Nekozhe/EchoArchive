@@ -2,15 +2,15 @@
   "string": [
     {
       "name": "module_desc",
-      "value": "module description"
+      "value": "回声档案 · 校园线索推理应用"
     },
     {
       "name": "EntryAbility_desc",
-      "value": "description"
+      "value": "回声档案主入口"
     },
     {
       "name": "EntryAbility_label",
-      "value": "label"
+      "value": "回声档案"
     }
   ]
 }
