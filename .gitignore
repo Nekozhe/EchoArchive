@@ -1,0 +1,51 @@
+# ============================================
+# HarmonyOS / DevEco Studio 工程忽略规则
+# 说明：以下内容要么可自动生成，要么含个人路径或签名密钥，不应提交
+# ============================================
+
+# ---- 依赖与构建产物（体积大，可由 hvigor 重新生成） ----
+oh_modules/
+**/oh_modules/
+build/
+**/build/
+.hvigor/
+**/.hvigor/
+.cxx/
+**/.cxx/
+.preview/
+**/.preview/
+*.pyc
+__pycache__/
+
+# ---- IDE 本地配置（含本机绝对路径） ----
+.idea/
+**/.idea/
+*.iml
+local.properties
+.hvigor-cache/
+
+# ---- 签名材料（严禁提交，泄露会导致他人可伪造你的应用） ----
+*.p12
+*.cer
+*.p7b
+*.csr
+signature/
+**/signature/
+
+# ---- 打包产物 ----
+*.hap
+*.hsp
+*.har
+
+# ---- 系统与日志 ----
+.DS_Store
+Thumbs.db
+*.log
+*.log.*
+
+# ---- 注意：以下文件必须提交，不要加入忽略 ----
+# hvigorfile.ts
+# hvigor/hvigor-config.json5
+# oh-package.json5, oh-package-lock.json5
+# build-profile.json5
+# AppScope/app.json5
