@@ -21,7 +21,7 @@
 | 项 | 版本 |
 | --- | --- |
 | 开发工具 | DevEco Studio 26.0.0.821 (Windows) |
-| SDK | HarmonyOS SDK 6.1.0(23)，compileSdkVersion 26.0.0 |
+| SDK | HarmonyOS SDK 6.1.1(24)，compatibleSdkVersion 6.1.1(24) / targetSdkVersion 26.0.0 |
 | 运行设备 | DevEco 自带模拟器（API 26，127.0.0.1:5555） |
 | 工程模型 | Stage 模型 |
 | 语言 | ArkTS / ArkUI |
