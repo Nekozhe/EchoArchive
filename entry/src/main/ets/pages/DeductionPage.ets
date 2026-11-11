@@ -39,10 +39,27 @@ struct DeductionPage {
   }
 
   private summaryText(): string {
-    const p: string = this.person === '' ? '未选' : this.person;
-    const t: string = this.period === '' ? '未选' : this.period;
-    const e: string = this.evidence === '' ? '未选' : this.evidence;
-    return `${p} / ${t} / ${e}`;
+    return `${this.labelOf(PERSON_OPTIONS, this.person)} / ${this.labelOf(PERIOD_OPTIONS, this.period)} / ${this.labelOf(EVIDENCE_OPTIONS, this.evidence)}`;
+  }
+
+  /** 把内部 id 转成人看的标签 */
+  private labelOf(options: OptionItem[], id: string): string {
+    if (id === '') {
+      return '未选';
+    }
+    const found: OptionItem | undefined = options.find((item: OptionItem) => item.id === id);
+    return found === undefined ? id : found.label;
+  }
+
+  /** 当前选中的 id（供选项高亮使用） */
+  private selectedOf(kind: string): string {
+    if (kind === 'person') {
+      return this.person;
+    }
+    if (kind === 'period') {
+      return this.period;
+    }
+    return this.evidence;
   }
 
   private submit(): void {
@@ -71,7 +88,7 @@ struct DeductionPage {
   }
 
   @Builder
-  chipRow(title: string, options: OptionItem[], current: string, kind: string) {
+  chipRow(title: string, options: OptionItem[], kind: string) {
     Column({ space: 10 }) {
       Row() {
         Text(title).fontSize(13).fontColor(C_TEXT)
@@ -85,13 +102,13 @@ struct DeductionPage {
           Text(item.label)
             .fontSize(13)
             .fontColor(this.isLocked(item, kind) ? '#4C5A6E'
-              : (current === item.id ? C_ACCENT_DARK : C_TEXT))
+              : (this.selectedOf(kind) === item.id ? C_ACCENT_DARK : C_TEXT))
             .padding({ left: 14, right: 14, top: 9, bottom: 9 })
             .margin({ right: 8, bottom: 8 })
             .backgroundColor(this.isLocked(item, kind) ? '#1B2330'
-              : (current === item.id ? C_ACCENT : C_CARD_LIGHT))
+              : (this.selectedOf(kind) === item.id ? C_ACCENT : C_CARD_LIGHT))
             .borderRadius(9)
-            .border({ width: 1, color: current === item.id ? C_ACCENT : C_BORDER })
+            .border({ width: 1, color: this.selectedOf(kind) === item.id ? C_ACCENT : C_BORDER })
             .onClick(() => {
               if (this.isLocked(item, kind)) {
                 promptAction.showToast({ message: '这条物证还没拿到' });
@@ -162,9 +179,9 @@ struct DeductionPage {
             .backgroundColor('#1B2432')
             .borderRadius(10)
 
-          this.chipRow('谁搬走了原型机', PERSON_OPTIONS, this.person, 'person')
-          this.chipRow('发生在这段时间', PERIOD_OPTIONS, this.period, 'period')
-          this.chipRow('用哪条物证支撑', EVIDENCE_OPTIONS, this.evidence, 'evidence')
+          this.chipRow('谁搬走了原型机', PERSON_OPTIONS, 'person')
+          this.chipRow('发生在这段时间', PERIOD_OPTIONS, 'period')
+          this.chipRow('用哪条物证支撑', EVIDENCE_OPTIONS, 'evidence')
 
           Text(`已提交 ${this.gs.attemptCount} 次。指认错误会直接进入对应结局，无法反悔。`)
             .fontSize(11)
@@ -202,3 +219,4 @@ struct DeductionPage {
     .backgroundColor(C_BG)
   }
 }
+
