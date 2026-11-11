@@ -33,6 +33,30 @@
 3. 选择 `entry` 模块，点击 `Run 'entry'`。
 4. 应用启动后进入委托页。
 
+## 运行效果
+
+| 首页 | 场景探索 | 对话（含人物立绘） |
+| --- | --- | --- |
+| ![首页](docs/images/01-index.jpeg) | ![场景](docs/images/02-scene-lab.jpeg) | ![对话](docs/images/03-dialog.jpeg) |
+
+| 线索板 | 推理台 | 结局 |
+| --- | --- | --- |
+| ![线索板](docs/images/05-clueboard.jpeg) | ![推理台](docs/images/06-deduction.jpeg) | ![结局](docs/images/07-ending.jpeg) |
+
+**杀进程后重启，进度完整恢复**（8/8 线索、10 个节点、已完成指认）：
+
+![恢复](docs/images/08-restore.jpeg)
+
+**运行录屏**：[demo.mp4](docs/video/demo.mp4)（1 分 12 秒，含探索 → 取证 → 推理 → 结局 → 重启恢复）
+
+## 单元测试
+
+`entry/src/ohosTest/ets/test/GameLogic.test.ets`，6 条用例覆盖正常 / 边界 / 异常，在 API 26 模拟器上实测全部通过：
+
+![测试结果](docs/images/09-test-result.png)
+
+运行方式：DevEco 中右键 `GameLogic.test.ets` → `Run 'GameLogic.test.ets'`。
+
 ## 目录结构
 
 ```
@@ -40,10 +64,19 @@ EchoArchive/
 ├── AppScope/                 # 应用级配置与资源
 ├── entry/                    # 主模块
 │   └── src/
-│       ├── main/ets/         # ArkTS 源码（页面、业务、数据）
+│       ├── main/ets/         # ArkTS 源码
+│       │   ├── common/       # 配色与尺寸常量
+│       │   ├── data/         # 案情数据（线索/事件/对话/结局）
+│       │   ├── logic/        # 纯函数业务规则
+│       │   ├── model/        # 数据类型定义
+│       │   ├── pages/        # 5 个页面
+│       │   └── service/      # Preferences 存档服务
 │       └── ohosTest/         # 单元测试（hypium）
-├── docs/                     # 设计文档
-│   └── 01-方案提案.md
+├── docs/                     # 设计文档与截图
+│   ├── 01-方案提案.md
+│   ├── 02-需求说明书.docx
+│   ├── images/               # 运行截图
+│   └── video/demo.mp4        # 运行录屏
 ├── hvigor/                   # 构建脚本配置
 └── README.md
 ```
