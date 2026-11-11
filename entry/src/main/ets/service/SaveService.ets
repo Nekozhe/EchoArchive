@@ -42,17 +42,28 @@ export class SaveService {
       const store: preferences.Preferences = await SaveService.getStore();
       const raw: preferences.ValueType = await store.get(SAVE_KEY, '');
       const text: string = typeof raw === 'string' ? raw : '';
-      if (text.length === 0) {
-        return newGameState();
-      }
-      const parsed: GameState = JSON.parse(text) as GameState;
+      return SaveService.parse(text);
+    } catch (err) {
+      hilog.error(DOMAIN, TAG, '读取存档失败: %{public}s', JSON.stringify(err));
+      return newGameState();
+    }
+  }
+
+  /**
+   * 解析存档文本（纯函数，便于单元测试）
+   * 空串 / 非法 JSON / 结构不兼容 一律降级为新档，保证应用可启动
+   */
+  static parse(raw: string): GameState {
+    if (raw.length === 0) {
+      return newGameState();
+    }
+    try {
+      const parsed: GameState = JSON.parse(raw) as GameState;
       if (!SaveService.isValid(parsed)) {
-        hilog.warn(DOMAIN, TAG, '存档结构不兼容，降级为新档');
         return newGameState();
       }
       return parsed;
     } catch (err) {
-      hilog.error(DOMAIN, TAG, '读取存档失败: %{public}s', JSON.stringify(err));
       return newGameState();
     }
   }
